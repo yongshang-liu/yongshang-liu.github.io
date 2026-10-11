@@ -1,0 +1,80 @@
+name: Sync site to GitHub Pages
+
+on:
+  schedule:
+    # 22:15 UTC = 07:15 Korea Standard Time (next day).
+    - cron: "15 22 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download the latest published site
+        env:
+          SOURCE_SITE: https://personal-studio-2026.sturdypond1.chatgpt.site
+          TARGET_SITE: https://yongshang-liu.github.io
+        run: |
+          set -euo pipefail
+          mkdir -p public
+
+          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml; do
+            source_path="/$file"
+            if [ "$file" = "index.html" ]; then
+              source_path="/"
+            fi
+
+            curl --fail --silent --show-error --location \
+              --retry 3 --retry-delay 5 \
+              "$SOURCE_SITE$source_path" \
+              --output "public/$file"
+
+            test -s "public/$file"
+          done
+
+          sed -i "s#${SOURCE_SITE}#${TARGET_SITE}#g" \
+            public/index.html public/us.html public/global.html \
+            public/china.html public/robots.txt public/sitemap.xml
+
+      - name: Keep repository files in sync
+        run: |
+          set -euo pipefail
+          cp public/index.html public/us.html public/global.html public/china.html .
+          cp public/news.css public/robots.txt public/sitemap.xml .
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html us.html global.html china.html news.css robots.txt sitemap.xml
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync latest site content"
+            git push
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
