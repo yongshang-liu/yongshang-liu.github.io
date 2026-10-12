@@ -37,7 +37,7 @@ jobs:
           set -euo pipefail
           mkdir -p public/resources
 
-          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf; do
+          for file in index.html us.html global.html china.html knowledge.html mathematics.html financial-lab.html courses.html projects.html news.css portal.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf; do
             source_path="/$file"
             if [ "$file" = "index.html" ]; then
               source_path="/"
@@ -64,7 +64,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html us.html global.html china.html news.css robots.txt sitemap.xml resources
+          git add index.html us.html global.html china.html knowledge.html mathematics.html financial-lab.html courses.html projects.html news.css portal.css robots.txt sitemap.xml resources
 
           if ! git diff --cached --quiet; then
             git commit -m "Sync latest site content"
