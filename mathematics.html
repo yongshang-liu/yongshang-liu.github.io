@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="portal.css">
 </head>
 <body>
-  <nav><div class="wrap navin"><a class="brand" href="index.html">Yongshang Liu</a><div class="links"><a href="knowledge.html">Knowledge</a><a href="courses.html">Courses</a><a href="financial-lab.html">Financial Lab</a><a href="projects.html">Projects</a></div></div></nav>
+  <nav><div class="wrap navin"><a class="brand" href="index.html">Yongshang Liu</a><div class="links"><a href="mathematics.html">Math &amp; Statistics</a><a href="economics-finance.html">Economics &amp; Finance</a><a href="coding-data.html">Coding &amp; Data</a></div></div></nav>
   <main>
     <header class="hero"><div class="wrap"><div class="crumb">Home / Knowledge / Mathematics Learning Path</div><h1>Learn the math<br>when it matters.</h1><p>A staged route for economics, finance, and econometrics: build the computational foundation first, add rigorous analysis for theory, and learn specialized mathematics alongside the research that uses it.</p></div></header>
 
@@ -49,16 +49,37 @@
 
     <section>
       <div class="wrap">
-        <div class="head"><small>03 / Optional extensions</small><h2>Useful later, not prerequisites now.</h2><p>These subjects matter in particular research areas, but they should not displace the core sequence unless a model or paper creates a clear need.</p></div>
+        <div class="head"><small>03 / Choose a destination</small><h2>One foundation. Different research routes.</h2><p>Financial econometrics and derivatives pricing share probability, analysis, and optimization, but they diverge after the foundation. Choose the branch that matches the question you want to answer.</p></div>
+        <div class="grid guidance-grid">
+          <article class="card"><small>Primary route · Methods</small><h3>Financial &amp; Theoretical Econometrics</h3><p><strong>Why follow it:</strong> this route is for developing estimators, studying identification and inference, explaining financial data, and building methods whose reliability can be proved.</p><span class="action pending">Probability → asymptotics → econometrics</span></article>
+          <article class="card"><small>Specialized route · Pricing</small><h3>Derivatives &amp; Mathematical Finance</h3><p><strong>Why follow it:</strong> this route is for pricing contingent claims and modelling asset prices, volatility, credit events, and interest rates in discrete or continuous time.</p><span class="action pending">Martingales → Itô calculus → SDEs</span></article>
+        </div>
+
+        <div class="route-note"><strong>Financial econometrics · main route</strong><span>Calculus → Linear Algebra → Probability &amp; Statistics → Optimization → Real Analysis → Measure-Theoretic Probability → Mathematical Statistics &amp; Asymptotic Theory → Econometric Theory → Time Series &amp; Financial Econometrics → Empirical Processes and Semiparametric Methods, when needed</span></div>
+        <div class="route-note"><strong>Derivatives pricing · optional branch</strong><span>Probability → Discrete-Time Asset Pricing → Martingales → Brownian Motion → Itô Calculus → Stochastic Differential Equations → Continuous-Time Asset Pricing → Numerical Methods and Model Calibration</span></div>
+
+        <div class="grid resource-grid">
+          <a class="card" href="https://link.springer.com/book/10.1007/978-0-387-22527-2" target="_blank" rel="noopener"><small>Pricing branch · Step 01</small><h3>Shreve I</h3><p><em>Stochastic Calculus for Finance I</em> develops binomial asset-pricing models, risk-neutral valuation, and discrete-time foundations before continuous-time mathematics.</p><span class="action">Official book page ↗</span></a>
+          <a class="card" href="https://link.springer.com/book/9780387401010" target="_blank" rel="noopener"><small>Pricing branch · Step 02</small><h3>Shreve II</h3><p><em>Stochastic Calculus for Finance II</em> introduces Brownian motion, Itô calculus, change of measure, and continuous-time pricing models.</p><span class="action">Official book page ↗</span></a>
+          <a class="card" href="https://link.springer.com/book/10.1007/978-3-662-02847-6" target="_blank" rel="noopener"><small>Pricing branch · Step 03</small><h3>Øksendal</h3><p><em>Stochastic Differential Equations</em> is a practical next step for learning SDE theory and applications after an introduction to stochastic calculus.</p><span class="action">Official book page ↗</span></a>
+          <a class="card" href="https://link.springer.com/book/10.1007/978-1-4612-0949-2" target="_blank" rel="noopener"><small>Pricing branch · Advanced</small><h3>Karatzas &amp; Shreve</h3><p><em>Brownian Motion and Stochastic Calculus</em> is a rigorous graduate reference. Study it for research depth, not as the first introduction.</p><span class="action">Official book page ↗</span></a>
+        </div>
+
+        <div class="route-note"><strong>A practical stopping rule</strong><span>For standard empirical finance, stop after the econometric tools needed by the project. For vanilla derivatives, Shreve I–II plus numerical methods form a strong base. Continue to advanced stochastic analysis or functional analysis only when the research problem demands it.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="head"><small>04 / Optional extensions</small><h2>Useful later, not prerequisites now.</h2><p>These subjects matter in particular research areas, but they should not displace the core sequence unless a model or paper creates a clear need.</p></div>
         <div class="grid">
           <article class="card"><small>Research extension</small><h3>Functional Analysis</h3><p><strong>Why learn it:</strong> it studies functions as points in spaces and operators acting on them. It becomes useful in nonparametric and semiparametric econometrics, inverse problems, infinite-dimensional optimization, term-structure models, and advanced asset pricing.</p><span class="action pending">Learn when functions become parameters</span></article>
           <article class="card"><small>Optional extension</small><h3>Abstract Algebra</h3><p><strong>Why learn it:</strong> it develops structural reasoning through groups, rings, and fields. It is intellectually valuable but rarely the main bottleneck in economics or finance, so it has lower priority than analysis, probability, optimization, and linear algebra.</p><span class="action pending">Study only for a specific theoretical need</span></article>
         </div>
-        <div class="route-note"><strong>Recommended route for a methods-oriented researcher</strong><span>Calculus → Linear Algebra → Probability &amp; Statistics → Optimization → Real Analysis → Measure-Theoretic Probability → Stochastic Processes → Econometric Theory</span></div>
-        <a class="back" href="knowledge.html">← Back to knowledge library</a>
+        <a class="back" href="index.html">← Back to home</a>
       </div>
     </section>
   </main>
-  <footer><div class="wrap foot"><h2>Build what the research needs.</h2><div><a href="knowledge.html">Knowledge Library</a><a href="index.html">Home</a><span>© 2026 Yongshang Liu</span></div></div></footer>
+  <footer><div class="wrap foot"><h2>Build what the research needs.</h2><div><a href="economics-finance.html">Economics &amp; Finance</a><a href="coding-data.html">Coding &amp; Data</a><a href="index.html">Home</a><span>© 2026 Yongshang Liu</span></div></div></footer>
 </body>
 </html>
