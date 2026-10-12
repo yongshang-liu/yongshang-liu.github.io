@@ -1,0 +1,1139 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seagull}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\usepackage{array}
+\definecolor{TitleBlue}{RGB}{18,46,84}
+\definecolor{SoftGray}{RGB}{245,246,248}
+\setbeamercolor{title}{fg=TitleBlue}
+\setbeamercolor{frametitle}{fg=white,bg=TitleBlue}
+\setbeamercolor{block title}{fg=white,bg=TitleBlue}
+\setbeamercolor{block body}{bg=SoftGray}
+\setbeamercolor{alertblock title}{fg=white,bg=black}
+\setbeamercolor{alertblock body}{bg=SoftGray}
+\setbeamertemplate{items}[square]
+\setbeamersize{text margin left=0.8cm,text margin right=0.8cm}
+\graphicspath{{exhibits/}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Ncdf}{N}
+\begin{document}
+\begin{frame}[t]{Global Financial Management Strategy}
+\centering
+\vspace{0.62cm}
+{\Large\textbf{Week 9: The Black--Scholes Model from First Principles}}\\[0.5cm]
+{\large Connecting Global Strategy with Financial Decisions}\\[0.3cm]
+{\normalsize LIU YONGSHANG}\\[0.7cm]
+\begin{tabular}{ll}
+\textbf{Course:} & Global Financial Management Strategy\\
+\textbf{Department:} & Business Administration\\
+\end{tabular}
+\end{frame}
+\begin{frame}[t]{Learning Objectives}
+\justifying
+\begin{itemize}
+\item Explain why continuous compounding produces the number $e$.
+\item Distinguish a normal distribution from a lognormal distribution.
+\item Interpret Brownian motion, $dt$, $dW$, and a stochastic differential equation.
+\item Derive It\^o\textquotesingle s lemma from a second-order Taylor expansion.
+\item Construct the Black--Scholes hedge and derive the pricing PDE.
+\item Derive the European call formula and interpret $d_1$ and $d_2$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Lecture Roadmap}
+\justifying
+\begin{enumerate}
+\item[9.1] Exponential Growth and the Number $e$
+\item[9.2] Probability Foundations
+\item[9.3] Normal and Lognormal Distributions
+\item[9.4] Random Walks and Brownian Motion
+\item[9.5] Stochastic Differential Notation
+\item[9.6] Geometric Brownian Motion
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[t]{Lecture Roadmap (continued)}
+\justifying
+\begin{enumerate}
+\item[9.7] It\^o\textquotesingle s Lemma
+\item[9.8] No-Arbitrage and Replication
+\item[9.9] The Black--Scholes PDE
+\item[9.10] Solving the PDE
+\item[9.11] The Black--Scholes Formula
+\item[9.12] Interpretation, Extensions, and Limits
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[t]{Teaching Plan}
+\justifying
+\begin{itemize}
+\item First part: mathematical foundations with numerical examples.
+\item Second part: complete derivation of the option-pricing model.
+\item Final 30 minutes: guided exercises followed by solutions.
+\end{itemize}\begin{alertblock}{Common mistake}Students should explain each symbol before substituting numbers.\end{alertblock}
+\end{frame}
+
+\section{9.1 Exponential Growth and the Number $e$}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.1 Exponential Growth and the Number $e$}\par
+\vspace{0.5cm}{\large Why continuous time naturally creates an exponential function}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Simple Interest}
+\justifying
+\begin{itemize}
+\item Simple interest applies the rate only to the original principal.
+\item For principal $P$, annual rate $r$, and time $t$, the future value is
+\item \[FV=P(1+rt).\]
+\item The interest earned during one period does not itself earn interest.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Compound Interest}
+\justifying
+\begin{itemize}
+\item Compounding reinvests interest after every compounding date.
+\item If the year contains $m$ compounding periods,
+\item \[FV_m=P\left(1+\frac{r}{m}\right)^{mt}.\]
+\item Increasing $m$ makes compounding more frequent.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{The Limit that Defines $e$}
+\justifying
+Set $r=1$, $t=1$, and let the number of compounding periods increase:
+\[\left(1+\frac{1}{m}\right)^m.\]
+\begin{center}
+\begin{tabular}{rrrrrr}\toprule
+$m$&1&2&4&12&365\\\midrule
+Value&2.0000&2.2500&2.4414&2.6130&2.7146\\\bottomrule
+\end{tabular}
+\end{center}
+The sequence approaches
+\[e=\lim_{m\to\infty}\left(1+\frac{1}{m}\right)^m\approx2.71828.\]
+\end{frame}
+
+\begin{frame}[t]{Why $e$ Appears in Finance}
+\justifying
+\begin{itemize}
+\item Continuous compounding takes the limit as the compounding interval approaches zero.
+\item \[\lim_{m\to\infty}P\left(1+\frac{r}{m}\right)^{mt}=Pe^{rt}.\]
+\item The exponential function is the unique growth function whose instantaneous growth rate is proportional to its current level.
+\item \[\frac{d}{dt}e^{rt}=re^{rt}.\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Exponential Growth as a Differential Equation}
+\justifying
+Suppose value grows at instantaneous rate $r$:
+\[\frac{dV_t}{dt}=rV_t.\]
+Separate variables:
+\[\frac{dV_t}{V_t}=r\,dt.\]
+Integrate from $0$ to $t$:
+\[\ln V_t-\ln V_0=rt.\]
+Exponentiating gives
+\[V_t=V_0e^{rt}.\]
+\end{frame}
+
+\begin{frame}[t]{Discounting with Continuous Compounding}
+\justifying
+If one dollar grows to $e^{rT}$ dollars at time $T$, then one dollar received at time $T$ has present value
+\[PV=e^{-rT}.\]
+For a certain payment $K$ at time $T$,
+\[PV(K)=Ke^{-rT}.\]
+\begin{block}{Finance interpretation}The term $e^{-rT}$ appears in Black--Scholes because the strike payment occurs at expiration and must be discounted continuously.\end{block}
+\end{frame}
+
+\begin{frame}[t]{Logarithms Undo Exponentials}
+\justifying
+\begin{itemize}
+\item If $y=e^x$, then $x=\ln y$.
+\item $\ln(ab)=\ln a+\ln b$ converts multiplication into addition.
+\item $\ln(a^q)=q\ln a$ brings powers down as coefficients.
+\item These properties make continuously compounded returns additive through time.
+\end{itemize}\begin{block}{Example}If $S_T=S_0e^R$, then $R=\ln(S_T/S_0)$.\end{block}
+\end{frame}
+
+\section{9.2 Probability Foundations}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.2 Probability Foundations}\par
+\vspace{0.5cm}{\large The minimum probability language needed for stochastic calculus}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Random Variables}
+\justifying
+\begin{itemize}
+\item A random variable assigns a number to each possible outcome.
+\item A discrete random variable takes countable values.
+\item A continuous random variable can take any value in an interval.
+\item A stock return is uncertain today and becomes an observed number later.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Expected Value}
+\justifying
+For discrete outcomes,
+\[\E[X]=\sum_i p_i x_i.\]
+For a continuous variable with density $f(x)$,
+\[\E[X]=\int_{-\infty}^{\infty}x f(x)\,dx.\]
+Expected value is a probability-weighted average, not a guaranteed outcome.
+\end{frame}
+
+\begin{frame}[t]{Variance and Standard Deviation}
+\justifying
+Variance measures average squared deviation from the mean:
+\[\Var(X)=\E[(X-\E[X])^2].\]
+Standard deviation uses the original unit:
+\[\sigma_X=\sqrt{\Var(X)}.\]
+In an option model, volatility is the annualized standard deviation of returns.
+\end{frame}
+
+\begin{frame}[t]{Conditional Expectation}
+\justifying
+\begin{itemize}
+\item $\E[X\mid\mathcal F_t]$ means the expected value of $X$ using information available at time $t$.
+\item The information set grows as prices and news arrive.
+\item Option value at time $t$ depends on the distribution of future payoffs conditional on current information.
+\end{itemize}\begin{block}{Notation}$\mathcal F_t$ represents everything known by time $t$.\end{block}
+\end{frame}
+
+\begin{frame}[t]{Independence}
+\justifying
+\begin{itemize}
+\item Two increments are independent when observing one provides no information about the other.
+\item For independent $X$ and $Y$, $\Cov(X,Y)=0$.
+\item Brownian motion assumes independent increments over nonoverlapping time intervals.
+\end{itemize}\begin{alertblock}{Common mistake}Zero covariance does not always imply independence. Joint normality makes the implication valid.\end{alertblock}
+\end{frame}
+
+\begin{frame}[t]{The Central Limit Idea}
+\justifying
+\begin{itemize}
+\item A long-period return combines many small shocks.
+\item Under suitable conditions, a standardized sum of independent small shocks approaches a normal distribution.
+\item This limiting idea motivates normal increments in Brownian motion.
+\item Market returns are not exactly normal, especially in crises.
+\end{itemize}
+\end{frame}
+
+\section{9.3 Normal and Lognormal Distributions}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.3 Normal and Lognormal Distributions}\par
+\vspace{0.5cm}{\large Why the model applies normality to log returns rather than prices}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{The Standard Normal Distribution}
+\justifying
+A standard normal variable $Z$ has density
+\[\phi(z)=\frac{1}{\sqrt{2\pi}}e^{-z^2/2}.\]
+Its cumulative distribution function is
+\[N(z)=\Pr(Z\le z)=\int_{-\infty}^{z}\phi(u)\,du.\]
+The function $N(\cdot)$ appears in the Black--Scholes formula.
+\end{frame}
+
+\begin{frame}[t]{Why the Normal Density Contains $e$}
+\justifying
+A bell-shaped density with derivative proportional to $-z$ times itself satisfies
+\[\phi'(z)=-z\phi(z).\]
+Solving this differential equation gives
+\[\phi(z)=Ce^{-z^2/2}.\]
+The constant $C=1/\sqrt{2\pi}$ makes the total area equal to one.
+\end{frame}
+
+\begin{frame}[t]{Normal Variables Can Be Negative}
+\justifying
+\begin{itemize}
+\item A normal variable ranges from $-\infty$ to $+\infty$.
+\item Modeling the stock price itself as normal assigns positive probability to a negative price.
+\item Limited liability prevents an ordinary share price from falling below zero.
+\item The model therefore places a normal distribution on the logarithm of price.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Definition of a Lognormal Variable}
+\justifying
+If
+\[Y=\ln X\sim N(m,v),\]
+then
+\[X=e^Y\]
+has a lognormal distribution. Because the exponential function is positive,
+\[X>0.\]
+The distribution is right-skewed and allows large upside outcomes.
+\end{frame}
+
+\begin{frame}[t]{Mean of a Lognormal Variable}
+\justifying
+If $Y\sim N(m,v)$ and $X=e^Y$, then
+\[\E[X]=e^{m+v/2}.\]
+The term $v/2$ matters. In the stock model, this term creates the $-\sigma^2/2$ adjustment in expected log return.
+\end{frame}
+
+\begin{frame}[t]{Price Ratios and Log Returns}
+\justifying
+The continuously compounded return is
+\[R_{t,T}=\ln\left(\frac{S_T}{S_t}\right).\]
+If log return is normal, then
+\[\frac{S_T}{S_t}=e^{R_{t,T}}\]
+is lognormal and remains positive.
+\end{frame}
+
+\begin{frame}[t]{Why Log Returns Are Convenient}
+\justifying
+\begin{itemize}
+\item Additivity: $\ln(S_2/S_0)=\ln(S_1/S_0)+\ln(S_2/S_1)$.
+\item Positivity: exponentiating a real number gives a positive price.
+\item Scale: percentage changes matter more than equal dollar changes across different price levels.
+\item Aggregation: sums of many small log-return shocks support a normal approximation.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Modeling Choice, Not a Natural Law}
+\justifying
+\begin{itemize}
+\item Actual returns show jumps, volatility clustering, skewness, and heavy tails.
+\item The lognormal assumption creates a tractable benchmark.
+\item Practitioners often use implied volatility, stochastic volatility, or jump models when the benchmark is inadequate.
+\end{itemize}\begin{alertblock}{Common mistake}The model does not claim that every observed return is normally distributed.\end{alertblock}
+\end{frame}
+
+\section{9.4 Random Walks and Brownian Motion}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.4 Random Walks and Brownian Motion}\par
+\vspace{0.5cm}{\large From many small shocks to a continuous random path}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{A Discrete Random Walk}
+\justifying
+Let each one-period shock be $\varepsilon_i\in\{-1,+1\}$ with equal probability. Define
+\[X_n=\sum_{i=1}^{n}\varepsilon_i.\]
+Then
+\[\E[X_n]=0,\qquad \Var(X_n)=n.\]
+The uncertainty grows with the number of steps.
+\end{frame}
+
+\begin{frame}[t]{Scaling a Random Walk}
+\justifying
+Divide a fixed horizon $T$ into $n$ intervals of length
+\[\Delta t=T/n.\]
+Scale each shock by $\sqrt{\Delta t}$:
+\[\Delta W_i=\sqrt{\Delta t}\,\varepsilon_i.\]
+Then
+\[\Var\left(\sum_{i=1}^n\Delta W_i\right)=n\Delta t=T.\]
+\end{frame}
+
+\begin{frame}[t]{Why the Shock Scales with $\sqrt{dt}$}
+\justifying
+If each shock scaled with $dt$, total variance would be
+\[n(dt)^2=T\,dt\to0.\]
+All randomness would disappear. If each shock had fixed variance, total variance would explode. Scaling by $\sqrt{dt}$ gives
+\[n(\sqrt{dt})^2=n\,dt=T,\]
+a finite nonzero variance.
+\end{frame}
+
+\begin{frame}[t]{Brownian Motion}
+\justifying
+\begin{itemize}
+\item $W_0=0$.
+\item Increments over nonoverlapping intervals are independent.
+\item $W_{t+h}-W_t\sim N(0,h)$.
+\item Sample paths are continuous with probability one.
+\item The path is continuous but almost surely nowhere differentiable.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Stationary Increments}
+\justifying
+For any $t$ and $h>0$,
+\[W_{t+h}-W_t\sim N(0,h).\]
+Only the interval length $h$ matters. The calendar starting point $t$ does not change the increment distribution.
+\[\E[W_{t+h}-W_t]=0,\qquad \Var(W_{t+h}-W_t)=h.\]
+\end{frame}
+
+\begin{frame}[t]{Why Brownian Motion Appears in Finance}
+\justifying
+\begin{itemize}
+\item Price changes reflect many small pieces of information.
+\item The aggregate of many small shocks suggests a continuous Gaussian limit.
+\item Independent increments create a mathematically manageable benchmark.
+\item The model provides continuous trading and closed-form valuation.
+\end{itemize}\begin{alertblock}{Common mistake}This explanation motivates the assumption. It does not prove that real prices must follow Brownian motion.\end{alertblock}
+\end{frame}
+
+\begin{frame}[t]{Brownian Paths Are Rough}
+\justifying
+\begin{itemize}
+\item Over a short interval, the typical increment has size $\sqrt{dt}$.
+\item The ratio $dW/dt$ has typical size $1/\sqrt{dt}$ and becomes unstable as $dt\to0$.
+\item Ordinary derivatives do not exist along a Brownian path.
+\item Stochastic calculus defines integrals directly rather than differentiating the path.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Quadratic Variation}
+\justifying
+For a partition $0=t_0<\cdots<t_n=T$,
+\[\sum_{i=1}^{n}(W_{t_i}-W_{t_{i-1}})^2\to T.\]
+This nonzero limit is Brownian quadratic variation. In differential shorthand,
+\[(dW)^2=dt.\]
+This identity creates the second-derivative term in It\^o\textquotesingle s lemma.
+\end{frame}
+
+\section{9.5 Stochastic Differential Notation}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.5 Stochastic Differential Notation}\par
+\vspace{0.5cm}{\large What $dt$, $dW$, and $dS$ actually mean}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Meaning of $dt$}
+\justifying
+\begin{itemize}
+\item $dt$ denotes a very small time interval in differential notation.
+\item In a rigorous construction, equations describe limits of sums as the largest interval approaches zero.
+\item A deterministic change proportional to $dt$ accumulates linearly with time.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Meaning of $dW$}
+\justifying
+Over a short interval $dt$,
+\[dW\sim N(0,dt).\]
+Equivalently,
+\[dW=\sqrt{dt}\,Z,\qquad Z\sim N(0,1).\]
+Therefore $dW$ has order $\sqrt{dt}$, which is larger than $dt$ over a very short interval.
+\end{frame}
+
+\begin{frame}[t]{The It\^o Multiplication Rules}
+\justifying
+The orders of small quantities imply
+\[(dt)^2=0,\qquad dt\,dW=0,\qquad (dW)^2=dt.\]
+The first two terms vanish relative to $dt$. The last term remains because Brownian motion has nonzero quadratic variation.
+\end{frame}
+
+\begin{frame}[t]{Meaning of a Stochastic Differential Equation}
+\justifying
+The notation
+\[dX_t=a(X_t,t)dt+b(X_t,t)dW_t\]
+is shorthand for the integral equation
+\[X_t=X_0+\int_0^t a(X_s,s)ds+\int_0^t b(X_s,s)dW_s.\]
+The first integral is ordinary. The second is an It\^o stochastic integral.
+\end{frame}
+
+\begin{frame}[t]{Drift and Diffusion}
+\justifying
+\begin{itemize}
+\item $a(X_t,t)dt$ is the conditional expected change over a short interval.
+\item $b(X_t,t)dW_t$ is the unpredictable shock.
+\item The drift has order $dt$. The diffusion has order $\sqrt{dt}$.
+\item At very high frequency, random variation dominates the local path.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Euler Discretization}
+\justifying
+For a small finite step $\Delta t$,
+\[X_{t+\Delta t}\approx X_t+a(X_t,t)\Delta t+b(X_t,t)\sqrt{\Delta t}\,Z.\]
+This approximation connects stochastic notation to simulation and spreadsheets.
+\end{frame}
+
+\section{9.6 Geometric Brownian Motion}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.6 Geometric Brownian Motion}\par
+\vspace{0.5cm}{\large The stock-price process used in Black--Scholes}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{The Stock-Price SDE}
+\justifying
+Black--Scholes assumes
+\[dS_t=\mu S_tdt+\sigma S_tdW_t.\]
+Dividing by $S_t$ gives
+\[\frac{dS_t}{S_t}=\mu dt+\sigma dW_t.\]
+$\mu$ is the instantaneous expected return and $\sigma$ is volatility.
+\end{frame}
+
+\begin{frame}[t]{Why the Model Is Multiplicative}
+\justifying
+\begin{itemize}
+\item The dollar volatility $\sigma S_t$ rises with the price level.
+\item The model describes proportional rather than fixed dollar changes.
+\item The same percentage shock has a larger dollar effect on a more valuable share.
+\item The resulting price remains positive.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{A Tempting but Incorrect Log Step}
+\justifying
+One might incorrectly write
+\[d\ln S_t=\frac{dS_t}{S_t}.\]
+This ordinary-calculus rule misses Brownian quadratic variation. The correct expression contains an additional term:
+\[d\ln S_t=\left(\mu-\frac{1}{2}\sigma^2\right)dt+\sigma dW_t.\]
+\end{frame}
+
+\begin{frame}[t]{Solution of Geometric Brownian Motion}
+\justifying
+Integrate the correct log equation from $0$ to $T$:
+\[\ln\frac{S_T}{S_0}=\left(\mu-\frac{1}{2}\sigma^2\right)T+\sigma W_T.\]
+Exponentiating,
+\[S_T=S_0\exp\left[\left(\mu-\frac{1}{2}\sigma^2\right)T+\sigma W_T\right].\]
+\end{frame}
+
+\begin{frame}[t]{Distribution of the Future Price}
+\justifying
+Because $W_T\sim N(0,T)$,
+\[\ln S_T\sim N\left(\ln S_0+\left(\mu-\frac{1}{2}\sigma^2\right)T,\ \sigma^2T\right).\]
+Therefore $S_T$ is lognormal. Its expectation is
+\[\E[S_T]=S_0e^{\mu T}.\]
+\end{frame}
+
+\section{9.7 It\^o\textquotesingle s Lemma}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.7 It\^o\textquotesingle s Lemma}\par
+\vspace{0.5cm}{\large The stochastic version of the chain rule}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Ordinary Taylor Expansion}
+\justifying
+For a smooth function $f(x,t)$,
+\[df\approx f_tdt+f_xdx+\frac{1}{2}f_{xx}(dx)^2+f_{xt}dxdt+\frac{1}{2}f_{tt}(dt)^2+\cdots\]
+In ordinary calculus, $(dx)^2$ usually vanishes faster than $dt$. Brownian motion changes this ordering.
+\end{frame}
+
+\begin{frame}[t]{Insert a Stochastic Change}
+\justifying
+Let
+\[dX=a\,dt+b\,dW.\]
+Then
+\[(dX)^2=a^2(dt)^2+2ab\,dt\,dW+b^2(dW)^2.\]
+Using the It\^o rules,
+\[(dX)^2=b^2dt.\]
+\end{frame}
+
+\begin{frame}[t]{Terms That Survive}
+\justifying
+In the Taylor expansion:
+\[(dt)^2\text{ has order }dt^2\to0,\]
+\[dt\,dW\text{ has order }dt^{3/2}\to0,\]
+\[(dW)^2\text{ has order }dt\text{ and remains.}\]
+Therefore the second derivative with respect to $x$ cannot be discarded.
+\end{frame}
+
+\begin{frame}[t]{It\^o\textquotesingle s Lemma in One Dimension}
+\justifying
+If
+\[dX=a(X,t)dt+b(X,t)dW\]
+and $f=f(X,t)$, then
+\[df=\left(f_t+af_x+\frac{1}{2}b^2f_{xx}\right)dt+bf_xdW.\]\begin{block}{Key difference from ordinary calculus}The correction term is $\tfrac12 b^2 f_{xx}dt$.\end{block}
+\end{frame}
+
+\begin{frame}[t]{Why the Factor $1/2$ Appears}
+\justifying
+\begin{itemize}
+\item The coefficient comes directly from the second-order Taylor term.
+\item Taylor expansion contains $\tfrac12 f_{xx}(dX)^2$.
+\item Brownian quadratic variation converts $(dX)^2$ into $b^2dt$.
+\item The surviving term becomes $\tfrac12 b^2f_{xx}dt$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Example: $f(X)=X^2$}
+\justifying
+Here $f_x=2X$ and $f_{xx}=2$. If $dX=a,dt+b,dW$, then
+\[d(X^2)=2X\,dX+b^2dt.\]
+Substituting $dX$,
+\[d(X^2)=(2aX+b^2)dt+2bX\,dW.\]
+Ordinary calculus would miss the $b^2dt$ term.
+\end{frame}
+
+\begin{frame}[t]{Example: $f(X)=\ln X$}
+\justifying
+For $f(X)=\ln X$,
+\[f_x=\frac1X,\qquad f_{xx}=-\frac1{X^2}.\]
+With $dS=\mu Sdt+\sigma SdW$,
+\[d\ln S=\frac1S dS-\frac12\frac1{S^2}(\sigma^2S^2)dt.\]
+Therefore
+\[d\ln S=\left(\mu-\frac12\sigma^2\right)dt+\sigma dW.\]
+\end{frame}
+
+\begin{frame}[t]{Example: $f(X)=e^X$}
+\justifying
+For $f(X)=e^X$, both first and second derivatives equal $e^X$. Thus
+\[d(e^X)=e^X\left(a+\frac12b^2\right)dt+e^Xb\,dW.\]
+The convexity of the exponential function raises the drift by $b^2/2$.
+\end{frame}
+
+\begin{frame}[t]{It\^o\textquotesingle s Lemma for an Option}
+\justifying
+Let the option value be $V(S,t)$ and let
+\[dS=\mu Sdt+\sigma SdW.\]
+Then
+\[dV=\left(V_t+\mu SV_S+\frac12\sigma^2S^2V_{SS}\right)dt+\sigma SV_SdW.\]
+This equation is the bridge from the stock process to option pricing.
+\end{frame}
+
+\begin{frame}[t]{Meaning of the Derivatives}
+\justifying
+\begin{itemize}
+\item $V_t$ measures time decay with the stock price fixed.
+\item $V_S=\Delta$ measures first-order exposure to the stock price.
+\item $V_{SS}=\Gamma$ measures curvature of the option value.
+\item The term $\tfrac12\sigma^2S^2\Gamma$ is the It\^o correction caused by price uncertainty.
+\end{itemize}
+\end{frame}
+
+\section{9.8 No-Arbitrage and Replication}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.8 No-Arbitrage and Replication}\par
+\vspace{0.5cm}{\large Why expected stock return disappears from option value}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Law of One Price}
+\justifying
+\begin{itemize}
+\item Two portfolios with identical future cash flows must have the same current value.
+\item If prices differ, traders buy the cheaper portfolio and sell the more expensive one.
+\item A persistent price difference would create an arbitrage profit without net risk or investment.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{A Locally Riskless Portfolio}
+\justifying
+Hold $\Delta$ shares and short one option:
+\[\Pi=\Delta S-V.\]
+Over a short interval,
+\[d\Pi=\Delta dS-dV.\]
+Choose $\Delta$ so that the $dW$ exposure cancels.
+\end{frame}
+
+\begin{frame}[t]{Delta Hedge}
+\justifying
+The random term in $dV$ is
+\[\sigma SV_SdW.\]
+The random term in $\Delta dS$ is
+\[\Delta\sigma SdW.\]
+Set
+\[\Delta=V_S.\]
+The two random terms cancel locally.
+\end{frame}
+
+\begin{frame}[t]{Return on the Hedged Portfolio}
+\justifying
+After choosing $\Delta=V_S$,
+\[d\Pi=\left(-V_t-\frac12\sigma^2S^2V_{SS}\right)dt.\]
+The portfolio has no $dW$ term over the instant. No arbitrage therefore requires
+\[d\Pi=r\Pi dt.\]
+\end{frame}
+
+\begin{frame}[t]{Why $\mu$ Disappears}
+\justifying
+\begin{itemize}
+\item Both the stock and option contain exposure to the same Brownian shock.
+\item The delta hedge removes that shock and also removes the stock drift term from the portfolio equation.
+\item The riskless portfolio earns the risk-free rate.
+\item Option value therefore depends on $r$ rather than the stock’s expected return $\mu$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Dynamic Replication}
+\justifying
+\begin{itemize}
+\item Option delta changes when the stock price or time changes.
+\item The replicating portfolio must rebalance continuously in the theoretical model.
+\item Real trading is discrete and costly, so actual hedges retain residual risk.
+\item Gamma measures how quickly delta changes with the stock price.
+\end{itemize}
+\end{frame}
+
+\section{9.9 The Black--Scholes Partial Differential Equation}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.9 The Black--Scholes Partial Differential Equation}\par
+\vspace{0.5cm}{\large Complete algebra from the hedge to the PDE}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Step 1: Stock Dynamics}
+\justifying
+Start with
+\[dS=\mu Sdt+\sigma SdW.\]
+The stock has expected proportional change $\mu dt$ and random proportional change $\sigma dW$.
+\end{frame}
+
+\begin{frame}[t]{Step 2: Option Dynamics}
+\justifying
+It\^o\textquotesingle s lemma gives
+\[dV=\left(V_t+\mu SV_S+\frac12\sigma^2S^2V_{SS}\right)dt+\sigma SV_SdW.\]
+\end{frame}
+
+\begin{frame}[t]{Step 3: Form the Portfolio}
+\justifying
+Set
+\[\Pi=V_S S-V.\]
+Over an instant, hold $V_S$ fixed while computing the portfolio change:
+\[d\Pi=V_SdS-dV.\]
+\end{frame}
+
+\begin{frame}[t]{Step 4: Cancel the Random Shock}
+\justifying
+\small
+Substitute $dS$ and $dV$:
+\[d\Pi=V_S(\mu Sdt+\sigma SdW)-\left[\left(V_t+\mu SV_S+\frac12\sigma^2S^2V_{SS}\right)dt+\sigma SV_SdW\right].\]
+The $\mu SV_Sdt$ and $\sigma SV_SdW$ terms cancel.
+\end{frame}
+
+\begin{frame}[t]{Step 5: Riskless Portfolio Change}
+\justifying
+After cancellation,
+\[d\Pi=-\left(V_t+\frac12\sigma^2S^2V_{SS}\right)dt.\]
+The portfolio value is
+\[\Pi=SV_S-V.\]
+\end{frame}
+
+\begin{frame}[t]{Step 6: Apply No Arbitrage}
+\justifying
+A locally riskless self-financing portfolio earns the risk-free rate:
+\[-\left(V_t+\frac12\sigma^2S^2V_{SS}\right)dt=r(SV_S-V)dt.\]
+Move every term to the left:
+\[\boxed{V_t+\frac12\sigma^2S^2V_{SS}+rSV_S-rV=0}.\]
+\end{frame}
+
+\begin{frame}[t]{Boundary and Terminal Conditions}
+\justifying
+The PDE alone does not identify a unique option price. A European call requires
+\[V(S,T)=\max(S-K,0).\]
+Useful boundaries are
+\[V(0,t)=0,\qquad V(S,t)\sim S-Ke^{-r(T-t)}\text{ as }S\to\infty.\]
+\end{frame}
+
+\begin{frame}[t]{Economic Meaning of the PDE}
+\justifying
+\begin{itemize}
+\item $V_t$ captures the passage of time.
+\item $\tfrac12\sigma^2S^2V_{SS}$ prices curvature under uncertainty.
+\item $rSV_S$ reflects the financing of the stock component.
+\item $-rV$ reflects the required return on the option value after hedging.
+\end{itemize}
+\end{frame}
+
+\section{9.10 Solving the Black--Scholes PDE}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.10 Solving the Black--Scholes PDE}\par
+\vspace{0.5cm}{\large From the pricing equation to the normal distribution}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Change of Variables}
+\justifying
+Define time to maturity and log moneyness:
+\[\tau=\frac12\sigma^2(T-t),\qquad x=\ln(S/K).\]
+Scale the option value:
+\[v(x,\tau)=V(S,t)/K.\]
+The logarithm converts the multiplicative stock variable into an additive variable.
+\end{frame}
+
+\begin{frame}[t]{Derivative Transformation}
+\justifying
+Because $x=\ln(S/K)$,
+\[SV_S=Kv_x,\qquad S^2V_{SS}=K(v_{xx}-v_x).\]
+Because $\tau=\tfrac12\sigma^2(T-t)$,
+\[V_t=-\frac12\sigma^2K v_\tau.\]
+\end{frame}
+
+\begin{frame}[t]{Dimensionless PDE}
+\justifying
+Let
+\[k=\frac{2r}{\sigma^2}.\]
+Substitution into the Black--Scholes PDE gives
+\[v_\tau=v_{xx}+(k-1)v_x-kv.\]
+This equation still contains a first derivative and a level term.
+\end{frame}
+
+\begin{frame}[t]{Remove the Extra Terms}
+\justifying
+Set
+\[v(x,\tau)=e^{ax+b\tau}u(x,\tau).\]
+Choose
+\[a=\frac{1-k}{2},\qquad b=-\frac{(k+1)^2}{4}.\]
+These constants cancel the $u_x$ and $u$ terms.
+\end{frame}
+
+\begin{frame}[t]{The Heat Equation}
+\justifying
+After the transformation,
+\[u_\tau=u_{xx}.\]
+The Black--Scholes pricing problem has become the classical heat equation. Diffusion of heat and diffusion of probability share the same mathematical structure.
+\end{frame}
+
+\begin{frame}[t]{Heat Kernel}
+\justifying
+\small
+The heat equation solution averages the initial condition with a Gaussian kernel:
+\[u(x,\tau)=\frac{1}{\sqrt{4\pi\tau}}\int_{-\infty}^{\infty}u(y,0)\exp\left[-\frac{(x-y)^2}{4\tau}\right]dy.\]
+This Gaussian integral explains why the normal CDF enters the final option formula.
+\end{frame}
+
+\begin{frame}[t]{Terminal Payoff under the Transformation}
+\justifying
+At maturity, $\tau=0$ and
+\[v(x,0)=\max(e^x-1,0).\]
+The payoff is positive only when $x>0$, which means $S>K$. The heat-kernel integral therefore splits at the exercise boundary.
+\end{frame}
+
+\begin{frame}[t]{An Equivalent Risk-Neutral Route}
+\justifying
+The PDE solution equals a discounted expectation under a risk-neutral probability measure:
+\[V_t=e^{-r(T-t)}\E^{\mathbb Q}[\text{payoff}\mid\mathcal F_t].\]
+Under $\mathbb Q$,
+\[dS=rSdt+\sigma SdW^{\mathbb Q}.\]
+The stock drift changes from $\mu$ to $r$ for pricing.
+\end{frame}
+
+\section{9.11 The Black--Scholes Formula}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.11 The Black--Scholes Formula}\par
+\vspace{0.5cm}{\large Evaluation of the discounted payoff integral}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Risk-Neutral Distribution of $S_T$}
+\justifying
+Let $\tau=T-t$. Under the risk-neutral measure,
+\[\ln S_T\sim N\left(\ln S_t+\left(r-\frac12\sigma^2\right)\tau,\ \sigma^2\tau\right).\]
+Equivalently,
+\[S_T=S_t\exp\left[\left(r-\frac12\sigma^2\right)\tau+\sigma\sqrt\tau Z\right].\]
+\end{frame}
+
+\begin{frame}[t]{Split the Call Payoff}
+\justifying
+A European call payoff is
+\[(S_T-K)^+=S_T\mathbf 1_{\{S_T>K\}}-K\mathbf 1_{\{S_T>K\}}.\]
+Therefore
+\[C_t=e^{-r\tau}\E^{\mathbb Q}[S_T\mathbf 1_{\{S_T>K\}}]-Ke^{-r\tau}\Pr^{\mathbb Q}(S_T>K).\]
+\end{frame}
+
+\begin{frame}[t]{Exercise Probability and $d_2$}
+\justifying
+The event $S_T>K$ becomes
+\[Z>\frac{\ln(K/S_t)-(r-\sigma^2/2)\tau}{\sigma\sqrt\tau}.\]
+Using normal symmetry,
+\[\Pr^{\mathbb Q}(S_T>K)=N(d_2),\]
+where
+\[d_2=\frac{\ln(S_t/K)+(r-\sigma^2/2)\tau}{\sigma\sqrt\tau}.\]
+\end{frame}
+
+\begin{frame}[t]{Stock-Weighted Term and $d_1$}
+\justifying
+Evaluating the truncated lognormal expectation gives
+\[e^{-r\tau}\E^{\mathbb Q}[S_T\mathbf 1_{\{S_T>K\}}]=S_tN(d_1),\]
+where
+\[d_1=\frac{\ln(S_t/K)+(r+\sigma^2/2)\tau}{\sigma\sqrt\tau}=d_2+\sigma\sqrt\tau.\]
+\end{frame}
+
+\begin{frame}[t]{European Call Formula}
+\justifying
+Combining the two payoff components gives
+\[\boxed{C_t=S_tN(d_1)-Ke^{-r\tau}N(d_2)}.\]
+The first term is the option-adjusted value of receiving the stock. The second term is the option-adjusted present value of paying the strike.
+\end{frame}
+
+\begin{frame}[t]{European Put Formula}
+\justifying
+Put--call parity gives
+\[C_t-P_t=S_t-Ke^{-r\tau}.\]
+Therefore
+\[\boxed{P_t=Ke^{-r\tau}N(-d_2)-S_tN(-d_1)}.\]
+\end{frame}
+
+\begin{frame}[t]{Interpretation of $N(d_1)$ and $N(d_2)$}
+\justifying
+\begin{itemize}
+\item $N(d_1)$ is the call delta for a non-dividend-paying stock.
+\item $N(d_2)$ is the risk-neutral probability that the call finishes in the money.
+\item The two numbers differ because the first expectation weights outcomes by the future stock price.
+\item $d_1=d_2+\sigma\sqrt\tau$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Why the Formula Contains Two Uses of $e$}
+\justifying
+\begin{itemize}
+\item $e^{-r\tau}$ discounts the future strike payment continuously.
+\item The lognormal stock model comes from exponentiating a normal log return.
+\item Both appearances trace back to continuous proportional growth.
+\item The normal density itself also contains an exponential term.
+\end{itemize}
+\end{frame}
+
+\section{9.12 Interpretation, Extensions, and Limits}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.12 Interpretation, Extensions, and Limits}\par
+\vspace{0.5cm}{\large What the model assumes and how practitioners adapt it}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Black--Scholes Assumptions}
+\justifying
+\begin{itemize}
+\item The stock follows geometric Brownian motion with constant volatility.
+\item Markets permit continuous trading without taxes or transaction costs.
+\item Investors can borrow and lend at the risk-free rate.
+\item Short selling is possible and securities are divisible.
+\item The option is European and the basic stock pays no dividend.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Dividend Yield Extension}
+\justifying
+For a continuous dividend yield $q$, risk-neutral stock dynamics become
+\[dS=(r-q)Sdt+\sigma SdW^{\mathbb Q}.\]
+The call price becomes
+\[C=S e^{-q\tau}N(d_1)-Ke^{-r\tau}N(d_2),\]
+with
+\[d_1=\frac{\ln(S/K)+(r-q+\sigma^2/2)\tau}{\sigma\sqrt\tau}.\]
+\end{frame}
+
+\begin{frame}[t]{The Greeks}
+\justifying
+\begin{center}
+\begin{tabular}{lll}\toprule
+Greek&Derivative&Main exposure\\\midrule
+Delta&$V_S$&stock-price sensitivity\\
+Gamma&$V_{SS}$&change in delta\\
+Theta&$V_t$&passage of time\\
+Vega&$V_\sigma$&volatility sensitivity\\
+Rho&$V_r$&interest-rate sensitivity\\\bottomrule
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[t]{Volatility and Option Value}
+\justifying
+\begin{itemize}
+\item A call holder has limited downside and retains upside.
+\item Greater volatility spreads the distribution of future prices.
+\item The favorable tail becomes more valuable while the payoff floor remains zero.
+\item Both call and put values generally rise with volatility.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Implied Volatility}
+\justifying
+Market price can be inserted into the Black--Scholes formula and solved for $\sigma$:
+\[C_{market}=BS(S,K,r,\tau,\sigma_{impl}).\]
+Implied volatility summarizes the volatility level consistent with the observed option price.
+\end{frame}
+
+\begin{frame}[t]{Volatility Smile}
+\justifying
+\begin{itemize}
+\item Constant volatility predicts the same volatility for all strikes and maturities.
+\item Observed implied volatility commonly varies across strike and maturity.
+\item The pattern reflects skewness, heavy tails, jumps, supply and demand, and market risk premiums.
+\item The smile shows where the benchmark model misses market behavior.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Global Financial Strategy Applications}
+\justifying
+\begin{itemize}
+\item Currency options protect uncertain foreign-currency cash flows while preserving favorable exchange-rate movements.
+\item Equity can be viewed as an option on firm assets when debt is outstanding.
+\item Investment timing creates real options when management can wait for country or regulatory information.
+\item Option-based compensation affects dilution and managerial risk incentives.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Model Risk}
+\justifying
+\begin{itemize}
+\item Volatility changes over time and cannot be observed directly.
+\item Prices jump after major announcements or policy changes.
+\item Continuous hedging is impossible in practice.
+\item Liquidity, transaction costs, and funding constraints become important during stress.
+\item The formula is a benchmark that requires judgment and stress testing.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Full Derivation Map}
+\justifying
+\begin{enumerate}
+\item Continuous proportional growth produces $e$ and logarithms.
+\item Many small shocks motivate Brownian motion and normal increments.
+\item Exponentiating normal log returns produces positive lognormal prices.
+\item Brownian quadratic variation produces It\^o\textquotesingle s correction term.
+\item Delta hedging removes the random shock and the unknown stock drift.
+\item No arbitrage produces the PDE.
+\item Gaussian integration produces $N(d_1)$ and $N(d_2)$.
+\end{enumerate}
+\end{frame}
+
+\section{9.P 30-Minute Practice}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.P 30-Minute Practice}\par
+\vspace{0.5cm}{\large Foundations, derivation, and interpretation}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Practice Instructions}
+\justifying
+\begin{itemize}
+\item Work individually for 20 minutes.
+\item Compare derivations with a partner for 5 minutes.
+\item Use the final 5 minutes to discuss economic interpretation.
+\item Show the order of each small term when applying It\^o calculus.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Practice 1: Continuous Compounding}
+\justifying
+A principal of \$1,000 earns a continuously compounded annual rate of 5\% for three years. Calculate the future value and explain why $e$ appears.
+\end{frame}
+
+\begin{frame}[t]{Practice 2: Log Return}
+\justifying
+A stock rises from \$80 to \$92. Compute the continuously compounded return and compare it with the simple return.
+\end{frame}
+
+\begin{frame}[t]{Practice 3: Brownian Increment}
+\justifying
+Let $dt=0.01$ year and $dW=\sqrt{dt}Z$. If $Z=-0.6$, compute $dW$. Compare the sizes of $dt$, $dW$, $(dW)^2$, and $dt\,dW$.
+\end{frame}
+
+\begin{frame}[t]{Practice 4: One It\^o Step}
+\justifying
+If $dX=2dt+3dW$, use It\^o\textquotesingle s lemma to find $d(X^2)$.
+\end{frame}
+
+\begin{frame}[t]{Practice 5: Log Stock Price}
+\justifying
+Starting from $dS=\mu Sdt+\sigma SdW$, derive $d\ln S$ and identify the It\^o correction.
+\end{frame}
+
+\begin{frame}[t]{Practice 6: Delta Hedge}
+\justifying
+An option has delta $0.65$. Construct a portfolio using shares and one short option that eliminates the instantaneous $dW$ exposure.
+\end{frame}
+
+\begin{frame}[t]{Practice 7: PDE Algebra}
+\justifying
+Starting with $\Pi=V_SS-V$, reproduce the algebra leading to the Black--Scholes PDE.
+\end{frame}
+
+\begin{frame}[t]{Practice 8: Compute $d_1$ and $d_2$}
+\justifying
+Let $S=100$, $K=100$, $r=4\%$, $\sigma=20\%$, and $\tau=1$. Compute $d_1$ and $d_2$.
+\end{frame}
+
+\begin{frame}[t]{Practice 9: European Call}
+\justifying
+Using $N(0.30)=0.6179$ and $N(0.10)=0.5398$, calculate the call value for the data in Practice 8.
+\end{frame}
+
+\begin{frame}[t]{Practice 10: Assumption Diagnosis}
+\justifying
+A currency suddenly jumps 12\% after a policy announcement. Identify the Black--Scholes assumptions challenged by this event and explain the likely hedging consequence.
+\end{frame}
+
+\section{9.S Solutions and Debrief}
+\begin{frame}[plain]
+\centering\vfill
+{\color{TitleBlue}\Large\bfseries 9.S Solutions and Debrief}\par
+\vspace{0.5cm}{\large Detailed answers}\par
+\vfill\end{frame}
+
+\begin{frame}[t]{Solution 1}
+\justifying
+\[FV=1{,}000e^{0.05(3)}=\boxed{1{,}161.83}.\]
+$e$ appears because continuous compounding is the limit of increasingly frequent discrete compounding.
+\end{frame}
+
+\begin{frame}[t]{Solution 2}
+\justifying
+\[R_{log}=\ln(92/80)=\boxed{13.976\%}.\]
+\[R_{simple}=92/80-1=\boxed{15\%}.\]
+The relationship is $R_{log}=\ln(1+R_{simple})$.
+\end{frame}
+
+\begin{frame}[t]{Solution 3}
+\justifying
+\[dW=\sqrt{0.01}(-0.6)=\boxed{-0.06}.\]
+Orders: $dt=0.01$, $dW=-0.06$, $(dW)^2=0.0036$ for this realization, and $dt\,dW=-0.0006$. In stochastic-order reasoning, $(dW)^2$ accumulates like $dt$, while $dt\,dW$ vanishes.
+\end{frame}
+
+\begin{frame}[t]{Solution 4}
+\justifying
+For $f(X)=X^2$, $f_X=2X$ and $f_{XX}=2$:
+\[d(X^2)=2X(2dt+3dW)+\frac12(2)(3^2)dt.\]
+\[\boxed{d(X^2)=(4X+9)dt+6X dW}.\]
+\end{frame}
+
+\begin{frame}[t]{Solution 5}
+\justifying
+For $f(S)=\ln S$, $f_S=1/S$ and $f_{SS}=-1/S^2$:
+\[d\ln S=\frac1S dS+\frac12\left(-\frac1{S^2}\right)(\sigma^2S^2)dt.\]
+\[\boxed{d\ln S=(\mu-\sigma^2/2)dt+\sigma dW}.\]
+\end{frame}
+
+\begin{frame}[t]{Solution 6}
+\justifying
+Short one option and buy $0.65$ shares:
+\[\Pi=0.65S-V.\]
+\begin{itemize}
+\item The stock contributes $0.65\sigma S dW$.
+\item The short option contributes $-V_S\sigma S dW=-0.65\sigma S dW$.
+\item The random terms cancel locally.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Solution 7}
+\justifying
+\[d\Pi=V_SdS-dV=-\left(V_t+\frac12\sigma^2S^2V_{SS}\right)dt.\]
+No arbitrage requires $d\Pi=r(V_SS-V)dt$. Rearranging,
+\[\boxed{V_t+\frac12\sigma^2S^2V_{SS}+rSV_S-rV=0}.\]
+\end{frame}
+
+\begin{frame}[t]{Solution 8}
+\justifying
+\[d_1=\frac{\ln(1)+(0.04+0.20^2/2)(1)}{0.20}=\boxed{0.30}.\]
+\[d_2=d_1-0.20=\boxed{0.10}.\]
+\end{frame}
+
+\begin{frame}[t]{Solution 9}
+\justifying
+\[C=100N(0.30)-100e^{-0.04}N(0.10).\]
+\[C=100(0.6179)-100(0.96079)(0.5398)\approx\boxed{9.93}.\]
+\end{frame}
+
+\begin{frame}[t]{Solution 10}
+\justifying
+A sudden jump violates continuous sample paths and challenges constant volatility and normal log-return assumptions. Delta computed immediately before the announcement cannot eliminate jump risk. The hedge may require jump or stochastic-volatility models, wider stress scenarios, and explicit liquidity reserves.
+\end{frame}
+
+\begin{frame}[t]{Chapter 9 Takeaways}
+\justifying
+\begin{itemize}
+\item Continuous growth explains the exponential and logarithmic terms.
+\item Brownian scaling explains $dW$, quadratic variation, and the It\^o correction.
+\item Delta hedging and no arbitrage produce the Black--Scholes PDE.
+\item The normal CDF enters when the lognormal payoff integral is evaluated.
+\item The model provides a benchmark, while actual risk management must address jumps, changing volatility, costs, and liquidity.
+\end{itemize}
+\end{frame}
+
+\end{document}
