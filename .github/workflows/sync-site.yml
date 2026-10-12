@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
           mkdir -p public/resources
 
-          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf resources/Week_9_Black_Scholes_Derivation.tex; do
+          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf; do
             source_path="/$file"
             if [ "$file" = "index.html" ]; then
               source_path="/"
