@@ -32,9 +32,9 @@ jobs:
           TARGET_SITE: https://yongshang-liu.github.io
         run: |
           set -euo pipefail
-          mkdir -p public
+          mkdir -p public/resources
 
-          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml; do
+          for file in index.html us.html global.html china.html news.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf resources/Week_9_Black_Scholes_Derivation.tex; do
             source_path="/$file"
             if [ "$file" = "index.html" ]; then
               source_path="/"
@@ -57,10 +57,11 @@ jobs:
           set -euo pipefail
           cp public/index.html public/us.html public/global.html public/china.html .
           cp public/news.css public/robots.txt public/sitemap.xml .
+          cp -R public/resources .
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html us.html global.html china.html news.css robots.txt sitemap.xml
+          git add index.html us.html global.html china.html news.css robots.txt sitemap.xml resources
 
           if ! git diff --cached --quiet; then
             git commit -m "Sync latest site content"
