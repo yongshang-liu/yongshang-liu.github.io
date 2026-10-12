@@ -1,6 +1,9 @@
 name: Sync site to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # 22:15 UTC = 07:15 Korea Standard Time (next day).
     - cron: "15 22 * * *"
