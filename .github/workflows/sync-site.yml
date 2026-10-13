@@ -37,7 +37,7 @@ jobs:
           set -euo pipefail
           mkdir -p public/resources
 
-          for file in index.html us.html global.html china.html knowledge.html mathematics.html financial-lab.html courses.html projects.html news.css portal.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf; do
+          for file in index.html knowledge.html mathematics.html economics-finance.html coding-data.html financial-lab.html courses.html projects.html portal.css robots.txt sitemap.xml resources/Week_9_Black_Scholes_Derivation.pdf; do
             source_path="/$file"
             if [ "$file" = "index.html" ]; then
               source_path="/"
@@ -52,19 +52,21 @@ jobs:
           done
 
           sed -i "s#${SOURCE_SITE}#${TARGET_SITE}#g" \
-            public/index.html public/us.html public/global.html \
-            public/china.html public/robots.txt public/sitemap.xml
+            public/index.html public/robots.txt public/sitemap.xml
 
       - name: Keep repository files in sync
         run: |
           set -euo pipefail
-          cp public/index.html public/us.html public/global.html public/china.html .
-          cp public/news.css public/robots.txt public/sitemap.xml .
+          cp public/index.html public/knowledge.html public/mathematics.html .
+          cp public/economics-finance.html public/coding-data.html .
+          cp public/financial-lab.html public/courses.html public/projects.html .
+          cp public/portal.css public/robots.txt public/sitemap.xml .
           cp -R public/resources .
+          rm -f us.html global.html china.html news.css
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html us.html global.html china.html knowledge.html mathematics.html financial-lab.html courses.html projects.html news.css portal.css robots.txt sitemap.xml resources
+          git add -A -- index.html knowledge.html mathematics.html economics-finance.html coding-data.html financial-lab.html courses.html projects.html portal.css robots.txt sitemap.xml resources us.html global.html china.html news.css
 
           if ! git diff --cached --quiet; then
             git commit -m "Sync latest site content"
