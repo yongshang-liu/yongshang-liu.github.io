@@ -101,6 +101,7 @@ jobs:
           test -s sql/course.js
           test -s sql/financial-data.sql
           grep -q "22 课完整课程" sql-learning.html
+          grep -q "每课 3+ 组代码" sql-learning.html
           grep -q "高级 SQL" sql/course.js
           mkdir -p public/sql
           cp sql-learning.html public/sql-learning.html
