@@ -73,6 +73,15 @@ jobs:
             git push
           fi
 
+      - name: Include locally maintained SQL teaching resources
+        run: |
+          set -euo pipefail
+          test -s sql-learning.html
+          test -s sql/lesson-01.sql
+          mkdir -p public/sql
+          cp sql-learning.html public/sql-learning.html
+          cp -R sql/. public/sql/
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
