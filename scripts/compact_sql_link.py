@@ -12,6 +12,7 @@ def compact(page):
         if marker not in html:
             raise SystemExit('Toolkit section changed upstream')
         html = html.replace(marker, '</div><p id="sql-course-link"><a href="sql-learning.html" style="text-decoration:underline;text-underline-offset:4px">MySQL &amp; SQL Learning Hub ↗</a></p></div></section>', 1)
+    html = '\n'.join(line.rstrip() for line in html.split('\n'))
     page.write_text(html, encoding='utf-8')
 
 if __name__ == '__main__':
