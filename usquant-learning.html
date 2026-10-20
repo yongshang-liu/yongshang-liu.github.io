@@ -24,9 +24,10 @@
   <main>
     <header class="hero"><div class="wrap"><div class="crumb">USQuant / QuantConnect LEAN</div><h1>中文量化学习中心</h1><p>从一笔模拟交易开始，逐步理解数据、信号、订单、成交与持仓。沿 LEAN 学习完整系统，每一步都留下可复现的代码和说明。</p></div></header>
     <section><div class="wrap">
-      <div class="head"><small>01 / 学习入口</small><h2>先读步骤，再读代码。</h2><p>当前已完成第一课的代码、逐行中文注释和真实 LEAN 引擎回测验证。以下入口链接到持续维护的 GitHub 材料。</p></div>
+      <div class="head"><small>01 / 学习入口</small><h2>先读步骤，再读代码。</h2><p>八课课程材料已完成，包含逐行中文注释、实验步骤、验收、练习和参考答案。八课历史实验已在真实 LEAN 引擎运行，以下入口链接到完整 GitHub 材料。</p></div>
       <aside class="learning-note"><p><strong>访问说明：</strong><a href="https://github.com/yongshang-liu/usquant">USQuant 的 GitHub 仓库</a>目前为私有。以下学习材料需要登录拥有仓库权限的 GitHub 账号；本页面没有公开私有代码、账户信息或密钥。</p></aside>
       <div class="list">
+        <article class="row"><small>八课总览</small><h3>完整课程目录与结课作业</h3><p>八课入口、配套工具、学习顺序、术语表与评分标准。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/docs/curriculum.md">打开完整课程 ↗</a></article>
         <article class="row"><small>路线</small><h3>中文系统学习路线</h3><p>按阶段理解算法生命周期、数据、因子、组合、风控和执行。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/docs/learning-path.md">阅读路线 ↗</a></article>
         <article class="row"><small>第一课</small><h3>逐行中文注释算法</h3><p>理解 initialize、on_data 与 on_order_event，区分请求和成交。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/01-first-backtest/main.py">查看代码 ↗</a></article>
         <article class="row"><small>运行</small><h3>逐行中文注释启动脚本</h3><p>看清真实 LEAN 如何启动，数据与结果如何映射到容器。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/scripts/run_lean.py">查看脚本 ↗</a></article>
@@ -35,18 +36,18 @@
       </div>
     </div></section>
     <section class="courses"><div class="wrap">
-      <div class="head"><small>02 / 课程进度</small><h2>第一课已完成，后续逐步建设。</h2><p>规划不等于已经上线的课程。后续材料完成并验证后，再增加代码和运行入口。</p></div>
+      <div class="head"><small>02 / 课程进度</small><h2>八课完整课程，循序学习。</h2><p>从 MySQL 数据到引擎维护，每课均有代码与中文讲义。课程材料完成与生产交易系统验收分开标注。</p></div>
       <div class="table-scroll"><table class="learning-table"><thead><tr><th scope="col">阶段</th><th scope="col">学习内容</th><th scope="col">状态</th></tr></thead><tbody>
         <tr><td>01</td><td><a href="https://github.com/yongshang-liu/usquant/tree/main/lessons/01-first-backtest">第一课：最小策略与完整订单过程 ↗</a></td><td class="ready">已完成 · 已验证</td></tr>
-        <tr><td>02</td><td>数据、证券身份与 MySQL 接口</td><td>规划中</td></tr>
-        <tr><td>03</td><td>指标、预热与因子研究</td><td>规划中</td></tr>
-        <tr><td>04</td><td>组合构建、仓位与风险控制</td><td>规划中</td></tr>
-        <tr><td>05</td><td>回测评估、基准与样本外验证</td><td>规划中</td></tr>
-        <tr><td>06</td><td>券商模拟盘与订单状态管理</td><td>规划中</td></tr>
-        <tr><td>07</td><td>真实盘配置、限额与人工接管</td><td>未来阶段 · 尚未启用</td></tr>
-        <tr><td>08</td><td>引擎源码、测试、版本与系统维护</td><td>规划中</td></tr>
+        <tr><td>02</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/02-data-mysql/README.md">数据与 MySQL：只读快照、自定义数据 ↗</a></td><td>实验已验证 · 21 条观测</td></tr>
+        <tr><td>03</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/03-factors/README.md">指标与因子：就绪、时序与研究偏差 ↗</a></td><td>历史实验已验证</td></tr>
+        <tr><td>04</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/04-portfolio-risk/README.md">组合与风控：框架、仓位、停机 ↗</a></td><td>历史实验已验证</td></tr>
+        <tr><td>05</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/05-backtest-evaluation/README.md">回测评估：成本、基准、采样回撤 ↗</a></td><td>两种成本情景已验证</td></tr>
+        <tr><td>06</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/06-paper-orders/README.md">券商模拟准备：订单状态、账户核验 ↗</a></td><td>离线撤单/成交 + 模拟账户只读核验</td></tr>
+        <tr><td>07</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/07-live-deployment/README.md">真实盘部署方法：限额、停机、恢复 ↗</a></td><td>正常/停机演练通过 · 实盘未启用</td></tr>
+        <tr><td>08</td><td><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/08-engine-maintenance/README.md">引擎维护：源码、回归、升级与回滚 ↗</a></td><td>基础回归实验已验证</td></tr>
       </tbody></table></div>
-      <aside class="learning-note"><p><strong>当前运行范围：</strong>历史回测。新的 LEAN 券商模拟接口尚未接入，也没有启用真实订单。真实盘是保留的后续目标，需要具体配置和独立验证。</p></aside>
+      <aside class="learning-note"><p><strong>当前运行范围：</strong>八课运行入口均为断网历史实验；另有独立的 Alpaca 模拟账户只读预检。尚未提交券商订单或部署持续实时策略。真实盘课程保留，但实际资金部署仍需独立验证与明确确认。</p></aside>
       <a class="back" href="projects.html#usquant">← 返回 USQuant 项目</a>
     </div></section>
   </main>
