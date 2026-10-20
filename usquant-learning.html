@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="刘永尚的 USQuant 中文学习中心：基于 QuantConnect LEAN，学习数据、因子、回测、模拟交易与未来实盘。">
+  <link rel="canonical" href="https://yongshang-liu.github.io/usquant-learning.html">
+  <link rel="stylesheet" href="portal.css">
+  <title>USQuant 中文学习中心 — Yongshang Liu</title>
+  <style>
+    .hero h1{line-height:1.12;letter-spacing:-.025em;font-size:clamp(38px,6vw,76px)}
+    .learning-note{border-left:3px solid var(--red);padding:16px 20px;background:var(--soft);line-height:1.8;margin:28px 0}
+    .learning-note p{margin:0}.learning-note a{text-decoration:underline;text-underline-offset:4px}
+    .learning-table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.7}
+    .learning-table th,.learning-table td{padding:16px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    .learning-table th{border-top:1px solid var(--black)}.ready{color:var(--red);font-weight:700}
+    .learning-table a{text-decoration:underline;text-underline-offset:4px}.table-scroll{overflow-x:auto}
+    .row h3{font-size:clamp(20px,2.5vw,30px);line-height:1.3}.row a{text-decoration:underline;text-underline-offset:4px}
+    @media(max-width:600px){.learning-table{min-width:520px}.hero{padding:52px 0}.learning-note{padding:14px}}
+  </style>
+</head>
+<body>
+  <nav><div class="wrap navin"><a class="brand" href="index.html">Yongshang Liu</a><div class="links"><a href="projects.html#usquant">USQuant 项目</a><a href="coding-data.html">Coding &amp; Data</a></div></div></nav>
+  <main>
+    <header class="hero"><div class="wrap"><div class="crumb">USQuant / QuantConnect LEAN</div><h1>中文量化学习中心</h1><p>从一笔模拟交易开始，逐步理解数据、信号、订单、成交与持仓。沿 LEAN 学习完整系统，每一步都留下可复现的代码和说明。</p></div></header>
+    <section><div class="wrap">
+      <div class="head"><small>01 / 学习入口</small><h2>先读步骤，再读代码。</h2><p>当前已完成第一课的代码、逐行中文注释和真实 LEAN 引擎回测验证。以下入口链接到持续维护的 GitHub 材料。</p></div>
+      <aside class="learning-note"><p><strong>访问说明：</strong><a href="https://github.com/yongshang-liu/usquant">USQuant 的 GitHub 仓库</a>目前为私有。以下学习材料需要登录拥有仓库权限的 GitHub 账号；本页面没有公开私有代码、账户信息或密钥。</p></aside>
+      <div class="list">
+        <article class="row"><small>路线</small><h3>中文系统学习路线</h3><p>按阶段理解算法生命周期、数据、因子、组合、风控和执行。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/docs/learning-path.md">阅读路线 ↗</a></article>
+        <article class="row"><small>第一课</small><h3>逐行中文注释算法</h3><p>理解 initialize、on_data 与 on_order_event，区分请求和成交。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/lessons/01-first-backtest/main.py">查看代码 ↗</a></article>
+        <article class="row"><small>运行</small><h3>逐行中文注释启动脚本</h3><p>看清真实 LEAN 如何启动，数据与结果如何映射到容器。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/scripts/run_lean.py">查看脚本 ↗</a></article>
+        <article class="row"><small>配置</small><h3>配置字段中文解释</h3><p>理解镜像版本、算法入口、路径、运行模式与来源清单。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/docs/zh/configuration.md">阅读说明 ↗</a></article>
+        <article class="row"><small>执行</small><h3>未来模拟盘与实盘路线</h3><p>保留真实盘目标，分阶段验证账户、订单、风控和异常恢复。</p><a href="https://github.com/yongshang-liu/usquant/blob/main/docs/zh/execution-roadmap.md">阅读路线 ↗</a></article>
+      </div>
+    </div></section>
+    <section class="courses"><div class="wrap">
+      <div class="head"><small>02 / 课程进度</small><h2>第一课已完成，后续逐步建设。</h2><p>规划不等于已经上线的课程。后续材料完成并验证后，再增加代码和运行入口。</p></div>
+      <div class="table-scroll"><table class="learning-table"><thead><tr><th scope="col">阶段</th><th scope="col">学习内容</th><th scope="col">状态</th></tr></thead><tbody>
+        <tr><td>01</td><td><a href="https://github.com/yongshang-liu/usquant/tree/main/lessons/01-first-backtest">第一课：最小策略与完整订单过程 ↗</a></td><td class="ready">已完成 · 已验证</td></tr>
+        <tr><td>02</td><td>数据、证券身份与 MySQL 接口</td><td>规划中</td></tr>
+        <tr><td>03</td><td>指标、预热与因子研究</td><td>规划中</td></tr>
+        <tr><td>04</td><td>组合构建、仓位与风险控制</td><td>规划中</td></tr>
+        <tr><td>05</td><td>回测评估、基准与样本外验证</td><td>规划中</td></tr>
+        <tr><td>06</td><td>券商模拟盘与订单状态管理</td><td>规划中</td></tr>
+        <tr><td>07</td><td>真实盘配置、限额与人工接管</td><td>未来阶段 · 尚未启用</td></tr>
+        <tr><td>08</td><td>引擎源码、测试、版本与系统维护</td><td>规划中</td></tr>
+      </tbody></table></div>
+      <aside class="learning-note"><p><strong>当前运行范围：</strong>历史回测。新的 LEAN 券商模拟接口尚未接入，也没有启用真实订单。真实盘是保留的后续目标，需要具体配置和独立验证。</p></aside>
+      <a class="back" href="projects.html#usquant">← 返回 USQuant 项目</a>
+    </div></section>
+  </main>
+  <footer><div class="wrap foot"><h2>理解每一步。</h2><div><a href="projects.html#usquant">USQuant 项目</a><a href="index.html">首页</a><span>© 2026 Yongshang Liu</span></div></div></footer>
+</body>
+</html>

@@ -1,18 +1,27 @@
 """Keep the USQuant entry present after upstream website synchronization."""
+import re
 from pathlib import Path
 
 root = Path('public')
-section = '    <section id="projects"><div class="wrap"><div class="section-head reveal"><span class="num">02 / WHAT I BUILD</span><h2>USQuant</h2><p>A Python, C++ and MySQL project for US equity data, backtesting, and paper-trading workflows, with SEC financial archives organized by year and quarter. In progress; live trading is disabled.</p></div><div class="list"><article class="row"><span class="type">Project</span><h3>US equity research toolkit</h3><p>Private GitHub repository — code access requires an invitation.</p><a class="cta" href="projects.html#usquant">View project ↗</a></article></div></div></section>\n'
-article = '<article class="row" id="usquant"><small>In progress</small><h3>USQuant</h3><p>A Python, C++ and MySQL toolkit for US equity data, backtesting and paper-trading workflows. SEC financial archives are organized by year and quarter. Private repository: access is limited to the owner and invited collaborators; public visitors cannot browse the code. Live trading is disabled.</p><a href="https://github.com/yongshang-liu/usquant" target="_blank" rel="noopener noreferrer">GitHub · Private ↗</a></article>'
+section = '    <section id="projects"><div class="wrap"><div class="section-head reveal"><span class="num">02 / WHAT I BUILD</span><h2>USQuant</h2><p>A QuantConnect LEAN learning project with Python strategies, detailed Chinese guides, and a roadmap from data and backtesting to paper trading. Live trading is a future milestone and is not enabled.</p></div><div class="list"><article class="row"><span class="type">Project</span><h3>US equity research toolkit</h3><p>Private GitHub repository — code access requires an invitation.</p><a class="cta" href="usquant-learning.html">中文学习中心 ↗</a></article></div></div></section>\n'
+article = '<article class="row" id="usquant"><small>In progress</small><h3>USQuant</h3><p>Now built around QuantConnect LEAN: Python algorithms, detailed Chinese learning notes and a staged trading-system roadmap. The code repository is private; GitHub materials require access. Current execution is offline backtesting.</p><a href="usquant-learning.html">中文学习中心 ↗</a></article>'
 home = root / 'index.html'
 html = home.read_text(encoding='utf-8')
-if 'id="projects"' not in html:
+# 更新我们维护的 USQuant 首页区块，避免继续展示迁移前的 C++ 引擎描述。
+if 'id="projects"' in html:
+    html = re.sub(r'<section id="projects">.*?</section>', lambda match: section.strip(), html, count=1, flags=re.S)
+    home.write_text(html, encoding='utf-8')
+else:
     if '</main>' not in html:
         raise SystemExit('Homepage main element changed upstream')
     home.write_text(html.replace('</main>', section + '\n</main>', 1), encoding='utf-8')
 page = root / 'projects.html'
 html = page.read_text(encoding='utf-8')
-if 'id="usquant"' not in html:
+# 项目页以学习中心为入口；具体代码链接集中在学习中心中。
+if 'id="usquant"' in html:
+    html = re.sub(r'<article class="row" id="usquant">.*?</article>', lambda match: article, html, count=1, flags=re.S)
+    page.write_text(html, encoding='utf-8')
+else:
     marker = '<div class="list">'
     if marker not in html:
         raise SystemExit('Project list changed upstream')
