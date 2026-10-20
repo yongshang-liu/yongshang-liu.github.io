@@ -59,14 +59,8 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
-          page = Path("public/coding-data.html")
-          html = page.read_text(encoding="utf-8")
-          old = '<article class="card"><small>Data management</small><h3>SQL &amp; Databases</h3><p>Relational design, queries, joins, indexing, validation, metadata, and research-ready data storage.</p><span class="action pending">Course links coming soon</span></article>'
-          new = '<a class="card" href="sql-learning.html"><small>Data management · 22 lessons</small><h3>SQL &amp; Databases</h3><p>Learn queries, joins, aggregation, transactions, and data design with live financial cases—no installation required.</p><span class="action">Open SQL Learning Hub ↗</span></a>'
-          if 'href="sql-learning.html"' not in html:
-              if old not in html:
-                  raise SystemExit("SQL course card placeholder changed upstream")
-              page.write_text(html.replace(old, new), encoding="utf-8")
+          import runpy
+          runpy.run_path("scripts/compact_sql_link.py")["compact"](Path("public/coding-data.html"))
 
           sitemap = Path("public/sitemap.xml")
           xml = sitemap.read_text(encoding="utf-8")
