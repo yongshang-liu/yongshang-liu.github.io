@@ -75,6 +75,9 @@ jobs:
               sitemap.write_text(xml.replace("</urlset>", entry + "</urlset>"), encoding="utf-8")
           PY
 
+      - name: Preserve USQuant project entry
+        run: python3 scripts/feature_usquant.py
+
       - name: Keep repository files in sync
         run: |
           set -euo pipefail
