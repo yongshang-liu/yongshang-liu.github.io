@@ -110,6 +110,26 @@ jobs:
           test -s usquant-learning.html
           cp usquant-learning.html public/usquant-learning.html
 
+      - name: Publish weekly theory paper archive and preserve its navigation link
+        run: |
+          set -euo pipefail
+          test -s weekly-theory-papers.html
+          cp weekly-theory-papers.html public/weekly-theory-papers.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("public/economics-finance.html")
+          html = p.read_text(encoding="utf-8")
+          if 'href="weekly-theory-papers.html"' not in html:
+              link = '<p><a href="weekly-theory-papers.html">Weekly Theory Papers — dated theoretical financial econometrics and asset pricing reading archive</a></p>'
+              if '</main>' in html:
+                  html = html.replace('</main>', link + '\n</main>', 1)
+              elif '</body>' in html:
+                  html = html.replace('</body>', link + '\n</body>', 1)
+              else:
+                  raise SystemExit("No safe insertion point for paper archive link")
+              p.write_text(html, encoding="utf-8")
+          PY
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
